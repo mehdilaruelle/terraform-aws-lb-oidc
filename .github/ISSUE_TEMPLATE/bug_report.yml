@@ -1,0 +1,59 @@
+name: Bug report
+description: Something in the module does not behave as documented
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include client secrets, ARNs of production resources, or
+        anything else you would not post publicly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what did you expect instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Module configuration
+      description: The `module` block you are using, with secrets redacted.
+      render: hcl
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Terraform output
+      description: Relevant plan, apply or test output.
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: module-version
+    attributes:
+      label: Module version
+      placeholder: "1.2.0"
+    validations:
+      required: true
+
+  - type: input
+    id: terraform-version
+    attributes:
+      label: Terraform version
+      placeholder: "1.15.8"
+    validations:
+      required: true
+
+  - type: input
+    id: provider-version
+    attributes:
+      label: AWS provider version
+      placeholder: "6.58.0"
+    validations:
+      required: true

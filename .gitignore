@@ -1,0 +1,34 @@
+# Local .terraform directories
+**/.terraform/*
+.terraform.tfstate.lock.info
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Variable files that usually hold secrets
+*.tfvars
+*.tfvars.json
+!examples/**/terraform.tfvars.example
+
+# CLI configuration
+.terraformrc
+terraform.rc
+
+# Plan output
+*.tfplan
+*.tfplan.*
+
+# Lock files are committed for the root module only
+examples/**/.terraform.lock.hcl
+
+# Editors / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
