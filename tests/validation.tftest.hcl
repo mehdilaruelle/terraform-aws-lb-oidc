@@ -286,3 +286,14 @@ run "requires_a_listener_arn_when_not_creating_the_listener" {
 
   expect_failures = [aws_lb_listener_rule.this["app"]]
 }
+
+run "rejects_a_listener_arn_while_creating_the_listener" {
+  command = plan
+
+  variables {
+    create_listener = true
+    listener_arn    = "arn:aws:elasticloadbalancing:eu-west-1:123456789012:listener/app/example/1234567890abcdef/abcdef1234567890"
+  }
+
+  expect_failures = [aws_lb_listener.this[0]]
+}

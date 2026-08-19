@@ -131,6 +131,11 @@ resource "aws_lb_listener" "this" {
     }
 
     precondition {
+      condition     = var.listener_arn == null
+      error_message = "`listener_arn` conflicts with `create_listener = true`. Either let the module create the listener, or set `create_listener = false` to attach the rules to the existing one."
+    }
+
+    precondition {
       condition     = var.protocol != "HTTPS" || var.certificate_arn != null
       error_message = "`certificate_arn` is required for an HTTPS listener."
     }
