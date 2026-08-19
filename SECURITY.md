@@ -4,8 +4,9 @@
 
 Please **do not** open a public issue for security problems.
 
-Use GitHub's [private vulnerability reporting](https://github.com/your-org/terraform-aws-lb-oidc/security/advisories/new)
-instead. You should get an acknowledgement within a few days.
+Use GitHub's [private vulnerability reporting](https://github.com/mehdilaruelle/terraform-aws-lb-oidc/security/advisories/new)
+instead, or email 3exr269ch@mozmail.com if you cannot use it. You should get
+an acknowledgement within a few days.
 
 ## Scope
 

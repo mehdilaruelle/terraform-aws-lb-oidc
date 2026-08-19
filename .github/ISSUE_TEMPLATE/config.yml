@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security vulnerability
-    url: https://github.com/your-org/terraform-aws-lb-oidc/security/advisories/new
+    url: https://github.com/mehdilaruelle/terraform-aws-lb-oidc/security/advisories/new
     about: Report privately, never in a public issue.
   - name: AWS documentation on ALB user authentication
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html

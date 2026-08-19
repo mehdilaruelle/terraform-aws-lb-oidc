@@ -13,7 +13,7 @@ variable "name" {
 variable "github_repository" {
   description = "Repository hosting this module, used for tagging only."
   type        = string
-  default     = "your-org/terraform-aws-lb-oidc"
+  default     = "mehdilaruelle/terraform-aws-lb-oidc"
 }
 
 variable "certificate_arn" {

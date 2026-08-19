@@ -15,7 +15,14 @@ pre-commit install
 
 ## Local checks
 
-Everything CI runs is reproducible locally, and none of it needs an AWS account:
+Everything CI runs is reproducible locally, and none of it needs an AWS
+account:
+
+```bash
+make all
+```
+
+Or one target at a time:
 
 ```bash
 terraform fmt -recursive
