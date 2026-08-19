@@ -142,3 +142,14 @@ jobs:
         with:
           sarif_file: trivy.sarif
           category: trivy-config
+
+  actionlint:
+    name: Workflows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: actionlint
+        uses: raven-actions/actionlint@v2
+        with:
+          fail-on-error: true
