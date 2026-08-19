@@ -236,3 +236,35 @@ run "tags_are_merged" {
     error_message = "Rule level tags should be merged in."
   }
 }
+
+run "authenticated_rules_without_host_header_are_left_out_of_the_redirect_uris" {
+  command = plan
+
+  variables {
+    callback_domains = ["app.example.com"]
+
+    rules = {
+      path_only = {
+        priority   = 100
+        conditions = { path_pattern = { values = ["/*"] } }
+        action = {
+          type             = "forward"
+          target_group_arn = "arn:aws:elasticloadbalancing:eu-west-1:123456789012:targetgroup/app/1111111111111111"
+        }
+      }
+      regex_host = {
+        priority   = 110
+        conditions = { host_header = { regex_values = ["^app-[0-9]+[.]example[.]com$"] } }
+        action = {
+          type             = "forward"
+          target_group_arn = "arn:aws:elasticloadbalancing:eu-west-1:123456789012:targetgroup/app/1111111111111111"
+        }
+      }
+    }
+  }
+
+  assert {
+    condition     = output.oidc_redirect_uris == ["https://app.example.com/oauth2/idpresponse"]
+    error_message = "Rules without a host header value must not contribute a redirect URI."
+  }
+}

@@ -143,21 +143,32 @@ variable "default_action" {
   }
 
   validation {
-    condition = var.default_action == null || anytrue([
-      var.default_action.type != "forward",
-      var.default_action.target_group_arn != null,
-      var.default_action.forward != null,
+    # `||` does not short-circuit before Terraform 1.10, so every attribute
+    # access on a possibly null object goes through `try`.
+    condition = anytrue([
+      var.default_action == null,
+      try(var.default_action.type, null) != "forward",
+      try(var.default_action.target_group_arn, null) != null,
+      try(var.default_action.forward, null) != null,
     ])
     error_message = "`default_action` of type `forward` requires either `target_group_arn` or `forward`."
   }
 
   validation {
-    condition     = var.default_action == null || var.default_action.type != "redirect" || var.default_action.redirect != null
+    condition = anytrue([
+      var.default_action == null,
+      try(var.default_action.type, null) != "redirect",
+      try(var.default_action.redirect, null) != null,
+    ])
     error_message = "`default_action` of type `redirect` requires a `redirect` block."
   }
 
   validation {
-    condition     = var.default_action == null || var.default_action.type != "fixed-response" || var.default_action.fixed_response != null
+    condition = anytrue([
+      var.default_action == null,
+      try(var.default_action.type, null) != "fixed-response",
+      try(var.default_action.fixed_response, null) != null,
+    ])
     error_message = "`default_action` of type `fixed-response` requires a `fixed_response` block."
   }
 }
@@ -435,7 +446,6 @@ variable "rules" {
   validation {
     condition = alltrue([
       for k, v in var.rules :
-      v.oidc == null || v.oidc.on_unauthenticated_request == null ||
       contains(["authenticate", "allow", "deny"], coalesce(try(v.oidc.on_unauthenticated_request, null), "authenticate"))
     ])
     error_message = "`rules[*].oidc.on_unauthenticated_request` must be one of: authenticate, allow, deny."

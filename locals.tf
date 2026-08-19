@@ -34,8 +34,8 @@ locals {
   # ----------------------------------------------------------------------------
 
   rule_hosts = flatten([
-    for key, rule in var.rules : coalesce(try(rule.conditions.host_header.values, null), [])
-    if rule.authenticate
+    for key, rule in var.rules : rule.conditions.host_header.values
+    if rule.authenticate && try(rule.conditions.host_header.values, null) != null
   ])
 
   callback_hosts = distinct([
