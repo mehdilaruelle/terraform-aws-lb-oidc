@@ -1,7 +1,7 @@
 # AWS Application Load Balancer OIDC authentication — Terraform module
 
-[![CI](https://github.com/your-org/terraform-aws-lb-oidc/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/terraform-aws-lb-oidc/actions/workflows/ci.yml)
-[![Terraform Registry](https://img.shields.io/badge/terraform-registry-7B42BC?logo=terraform)](https://registry.terraform.io/modules/your-org/lb-oidc/aws/latest)
+[![CI](https://github.com/mehdilaruelle/terraform-aws-lb-oidc/actions/workflows/ci.yml/badge.svg)](https://github.com/mehdilaruelle/terraform-aws-lb-oidc/actions/workflows/ci.yml)
+[![Terraform Registry](https://img.shields.io/badge/terraform-registry-7B42BC?logo=terraform)](https://registry.terraform.io/modules/mehdilaruelle/lb-oidc/aws/latest)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 Offload OpenID Connect authentication to an Application Load Balancer. The load
@@ -43,6 +43,33 @@ Once authenticated, the targets receive three extra headers:
   middle of an apply.
 
 Works with any compliant provider: Okta, Auth0, Microsoft Entra ID, Google,
+
+## Comparison with other modules
+
+`authenticate-oidc` is a plain listener action, so more than one module can emit
+it. What separates them is who owns the load balancer.
+
+| | This module | [`terraform-aws-modules/alb`](https://registry.terraform.io/modules/terraform-aws-modules/alb/aws) |
+| --- | --- | --- |
+| Owns the load balancer | no, takes an ARN | yes, creates it |
+| Attaches to a listener it does not manage | yes, `create_listener = false` | no |
+| OIDC endpoints | discovered from the issuer, or explicit | five URLs, always explicit |
+| Unauthenticated bypass rules | first class, `authenticate = false` | hand-written rules |
+| Per-rule OIDC overrides | yes | repeat the whole block per rule |
+| Redirect URIs to register at the IdP | computed output | work them out yourself |
+| Checks at plan time | scope, session timeout, duplicate priorities, HTTPS, endpoint resolution | provider-level only |
+
+**Reach for `terraform-aws-modules/alb`** when you are building the load balancer
+from scratch and already use that module: its `listeners` and `listener_rules`
+inputs accept an `authenticate_oidc` block, and one module beats two.
+
+**Reach for this one** when the load balancer already exists — owned by another
+team, an ingress controller, CDK, Copilot, or that very module — or when the
+endpoint discovery, the bypass rules and the plan-time validation are worth a
+second module.
+
+They compose: let the other module create the listener, then point this one at
+it with `create_listener = false`.
 Keycloak, GitLab, Ping, Authentik, Dex…
 
 ## Usage
@@ -51,7 +78,7 @@ Keycloak, GitLab, Ping, Authentik, Dex…
 
 ```hcl
 module "alb_oidc" {
-  source  = "your-org/lb-oidc/aws"
+  source  = "mehdilaruelle/lb-oidc/aws"
   version = "~> 1.0"
 
   load_balancer_arn = aws_lb.this.arn
@@ -77,7 +104,7 @@ the identity provider application.
 
 ```hcl
 module "alb_oidc" {
-  source  = "your-org/lb-oidc/aws"
+  source  = "mehdilaruelle/lb-oidc/aws"
   version = "~> 1.0"
 
   create_listener = false
@@ -246,7 +273,8 @@ No modules.
 ## Development
 
 ```bash
-terraform fmt -recursive && terraform init -backend=false && terraform validate && terraform test
+make all          # fmt, validate, test, lint, docs, examples
+make test         # just the test suite
 ```
 
 The test suite runs entirely on mocked providers, so no AWS account and no
