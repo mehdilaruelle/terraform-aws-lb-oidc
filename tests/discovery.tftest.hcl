@@ -4,13 +4,10 @@ mock_provider "http" {
   mock_data "http" {
     defaults = {
       status_code = 200
-      response_body = jsonencode({
-        issuer                 = "https://idp.example.com"
-        authorization_endpoint = "https://idp.example.com/discovered/authorize"
-        token_endpoint         = "https://idp.example.com/discovered/token"
-        userinfo_endpoint      = "https://idp.example.com/discovered/userinfo"
-        jwks_uri               = "https://idp.example.com/discovered/jwks"
-      })
+
+      # Mock defaults are literal values: Terraform rejects function calls here,
+      # so the discovery document is spelled out rather than `jsonencode`d.
+      response_body = "{\"issuer\":\"https://idp.example.com\",\"authorization_endpoint\":\"https://idp.example.com/discovered/authorize\",\"token_endpoint\":\"https://idp.example.com/discovered/token\",\"userinfo_endpoint\":\"https://idp.example.com/discovered/userinfo\",\"jwks_uri\":\"https://idp.example.com/discovered/jwks\"}"
     }
   }
 }

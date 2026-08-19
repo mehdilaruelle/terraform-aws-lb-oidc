@@ -7,7 +7,8 @@ Thanks for taking the time to contribute.
 Requirements: [Terraform](https://developer.hashicorp.com/terraform/downloads)
 >= 1.9, [tflint](https://github.com/terraform-linters/tflint),
 [terraform-docs](https://terraform-docs.io/) and, optionally,
-[pre-commit](https://pre-commit.com/).
+[pre-commit](https://pre-commit.com/). CI pins terraform-docs to v0.24.0, so
+install that version to avoid spurious diffs.
 
 ```bash
 pre-commit install
