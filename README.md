@@ -79,7 +79,7 @@ Keycloak, GitLab, Ping, Authentik, Dex…
 ```hcl
 module "alb_oidc" {
   source  = "mehdilaruelle/lb-oidc/aws"
-  version = "~> 1.0"
+  version = "~> 0.1"
 
   load_balancer_arn = aws_lb.this.arn
   certificate_arn   = aws_acm_certificate.this.arn
